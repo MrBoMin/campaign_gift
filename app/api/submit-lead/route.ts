@@ -27,10 +27,13 @@ export async function POST(request: NextRequest) {
       );
     }
 
+    // Get inventory (needed for prize selection and display)
+    const inventory = await getInventory();
+
     // Check for duplicate phone
     const existing = await findLeadByPhone(phone);
     if (existing) {
-      const display = getPrizeDisplay(existing.lead.prize);
+      const display = getPrizeDisplay(existing.lead.prize, inventory);
       return NextResponse.json({
         duplicate: true,
         prize: existing.lead.prize,
@@ -38,9 +41,6 @@ export async function POST(request: NextRequest) {
         display,
       });
     }
-
-    // Get inventory and select prize
-    const inventory = await getInventory();
     const result = selectPrize(inventory);
     const redemptionCode = result.isWin ? generateRedemptionCode() : "";
     const timestamp = formatTimestamp();
@@ -80,7 +80,7 @@ export async function POST(request: NextRequest) {
       });
     }
 
-    const display = getPrizeDisplay(result.prizeType);
+    const display = getPrizeDisplay(result.prizeType, inventory);
 
     return NextResponse.json({
       duplicate: false,

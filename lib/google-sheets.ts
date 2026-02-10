@@ -54,6 +54,9 @@ export interface InventoryItem {
   claimed: number;
   weight: number;
   active: boolean;
+  emoji: string;
+  displayTitle: string;
+  message: string;
 }
 
 // --- Leads Sheet ---
@@ -147,7 +150,7 @@ export async function getInventory(): Promise<InventoryItem[]> {
   const sheets = getSheets();
   const res = await sheets.spreadsheets.values.get({
     spreadsheetId: SPREADSHEET_ID,
-    range: "Inventory!A2:E",
+    range: "Inventory!A2:H",
   });
 
   const rows = res.data.values || [];
@@ -157,6 +160,9 @@ export async function getInventory(): Promise<InventoryItem[]> {
     claimed: parseInt(row[2] || "0", 10),
     weight: parseInt(row[3] || "0", 10),
     active: String(row[4] || "FALSE").toUpperCase() === "TRUE",
+    emoji: row[5] || "",
+    displayTitle: row[6] || "",
+    message: row[7] || "",
   }));
 }
 

@@ -44,48 +44,44 @@ export function selectPrize(inventory: InventoryItem[]): PrizeResult {
 }
 
 /**
- * Map prize type to display info
+ * Get prize display info from inventory data (from Google Sheet).
+ * Falls back to defaults if columns are empty.
  */
-export function getPrizeDisplay(prizeType: string): {
+export function getPrizeDisplay(
+  prizeType: string,
+  inventory?: InventoryItem[]
+): {
   emoji: string;
   title: string;
   description: string;
 } {
-  // Normalize to handle variations (e.g. "Photo Session" vs "Photo Sessions")
-  const normalized = prizeType.trim().toLowerCase();
+  // Look up from inventory if available
+  if (inventory) {
+    const item = inventory.find(
+      (i) => i.prizeType.trim().toLowerCase() === prizeType.trim().toLowerCase()
+    );
+    if (item && item.emoji && item.displayTitle) {
+      return {
+        emoji: item.emoji,
+        title: item.displayTitle,
+        description: item.message || "",
+      };
+    }
+  }
 
-  if (normalized === "blind box") {
+  // Fallback defaults for "No Prize"
+  if (prizeType.trim().toLowerCase() === "no prize") {
     return {
-      emoji: "🎁",
-      title: "Blind Box ဖောက်ခွင့်",
-      description: "Booth မှာလာပြပြီး ဖောက်လို့ရပါပြီ!",
+      emoji: "❌",
+      title: "Better Luck Next Time",
+      description: "ကံမကောင်းပါ၊ Booth မှာတော့ လာလည်ပါနော်!",
     };
   }
-  if (normalized.startsWith("scholarship")) {
-    return {
-      emoji: "🎓",
-      title: "Scholarship Voucher",
-      description: "Enrollment မှာ 10% OFF ရပါပြီ!",
-    };
-  }
-  if (normalized.startsWith("photo session")) {
-    return {
-      emoji: "📸",
-      title: "Free Photo Session",
-      description: "Booth မှာလာရိုက်ပါ!",
-    };
-  }
-  if (normalized === "thank you gift") {
-    return {
-      emoji: "🎉",
-      title: "Thank You Gift",
-      description: "Booth မှာ လက်ဆောင်လေးလာယူပါ!",
-    };
-  }
-  // No Prize / default
+
+  // Fallback: use prize type as title
   return {
-    emoji: "❌",
-    title: "Better Luck Next Time",
-    description: "ကံမကောင်းပါ၊ Booth မှာတော့ လာလည်ပါနော်!",
+    emoji: "🎁",
+    title: prizeType,
+    description: "Booth မှာ လာထုတ်ယူပါ!",
   };
 }
