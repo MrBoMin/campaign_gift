@@ -2,12 +2,33 @@ import { google, sheets_v4 } from "googleapis";
 
 let sheetsInstance: sheets_v4.Sheets | null = null;
 
+function formatPrivateKey(key: string): string {
+  // Handle various formats the key might arrive in:
+  // 1. With literal \n (from .env files)
+  // 2. With actual newlines (from some env var systems)
+  // 3. Wrapped in quotes (from copy-paste)
+  let formatted = key;
+
+  // Remove surrounding quotes if present
+  if ((formatted.startsWith('"') && formatted.endsWith('"')) ||
+      (formatted.startsWith("'") && formatted.endsWith("'"))) {
+    formatted = formatted.slice(1, -1);
+  }
+
+  // Replace literal \n with actual newlines
+  formatted = formatted.replace(/\\n/g, "\n");
+
+  return formatted;
+}
+
 function getSheets(): sheets_v4.Sheets {
   if (sheetsInstance) return sheetsInstance;
 
+  const privateKey = formatPrivateKey(process.env.GOOGLE_PRIVATE_KEY || "");
+
   const auth = new google.auth.JWT({
     email: process.env.GOOGLE_SERVICE_ACCOUNT_EMAIL,
-    key: (process.env.GOOGLE_PRIVATE_KEY || "").replace(/\\n/g, "\n"),
+    key: privateKey,
     scopes: ["https://www.googleapis.com/auth/spreadsheets"],
   });
 
