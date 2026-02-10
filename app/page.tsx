@@ -47,7 +47,6 @@ export default function Home() {
       }
 
       if (result.duplicate) {
-        // Show previous result directly
         setPrizeData({
           prize: result.prize,
           redemptionCode: result.redemptionCode,
@@ -76,34 +75,43 @@ export default function Home() {
   }, []);
 
   return (
-    <main className="relative min-h-screen bg-white">
+    <main className="relative min-h-screen overflow-hidden">
+      {/* Step transitions */}
       <div
-        className={`transition-opacity duration-500 ${
-          step === "welcome" ? "opacity-100" : "pointer-events-none absolute inset-0 opacity-0"
+        className={`transition-all duration-700 ease-in-out ${
+          step === "welcome"
+            ? "opacity-100 translate-y-0"
+            : "pointer-events-none absolute inset-0 opacity-0 -translate-y-8"
         }`}
       >
         <WelcomeStep onStart={() => setStep("form")} />
       </div>
 
       <div
-        className={`transition-opacity duration-500 ${
-          step === "form" ? "opacity-100" : "pointer-events-none absolute inset-0 opacity-0"
+        className={`transition-all duration-700 ease-in-out ${
+          step === "form"
+            ? "opacity-100 translate-y-0"
+            : "pointer-events-none absolute inset-0 opacity-0 translate-y-8"
         }`}
       >
         <LeadForm onSubmit={handleFormSubmit} isLoading={isLoading} />
       </div>
 
       <div
-        className={`transition-opacity duration-500 ${
-          step === "draw" ? "opacity-100" : "pointer-events-none absolute inset-0 opacity-0"
+        className={`transition-all duration-700 ease-in-out ${
+          step === "draw"
+            ? "opacity-100 scale-100"
+            : "pointer-events-none absolute inset-0 opacity-0 scale-95"
         }`}
       >
         {step === "draw" && <LuckyDraw onComplete={handleDrawComplete} />}
       </div>
 
       <div
-        className={`transition-opacity duration-500 ${
-          step === "result" ? "opacity-100" : "pointer-events-none absolute inset-0 opacity-0"
+        className={`transition-all duration-700 ease-in-out ${
+          step === "result"
+            ? "opacity-100 scale-100"
+            : "pointer-events-none absolute inset-0 opacity-0 scale-95"
         }`}
       >
         {prizeData && step === "result" && (
@@ -118,8 +126,10 @@ export default function Home() {
       </div>
 
       <div
-        className={`transition-opacity duration-500 ${
-          step === "info" ? "opacity-100" : "pointer-events-none absolute inset-0 opacity-0"
+        className={`transition-all duration-700 ease-in-out ${
+          step === "info"
+            ? "opacity-100 translate-y-0"
+            : "pointer-events-none absolute inset-0 opacity-0 translate-y-8"
         }`}
       >
         {step === "info" && <CollegeInfo />}

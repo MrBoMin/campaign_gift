@@ -190,6 +190,12 @@ export default function AdminPage() {
             </p>
           </div>
           <div className="flex items-center gap-3">
+            <a
+              href="/admin/qr"
+              className="rounded-lg border border-gray-200 px-3 py-1.5 text-sm font-medium text-gray-600 transition-all hover:bg-gray-50"
+            >
+              QR Code
+            </a>
             <button
               onClick={fetchData}
               disabled={isLoading}
