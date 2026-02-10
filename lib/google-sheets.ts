@@ -101,9 +101,16 @@ export async function getLeads(): Promise<Lead[]> {
 
 export async function findLeadByPhone(phone: string): Promise<{ lead: Lead; rowIndex: number } | null> {
   const leads = await getLeads();
-  const index = leads.findIndex((l) => l.phone === phone);
-  if (index === -1) return null;
-  return { lead: leads[index], rowIndex: index + 2 }; // +2 for header row and 1-based index
+  // Find the latest entry for this phone (last occurrence)
+  let lastIndex = -1;
+  for (let i = leads.length - 1; i >= 0; i--) {
+    if (leads[i].phone === phone) {
+      lastIndex = i;
+      break;
+    }
+  }
+  if (lastIndex === -1) return null;
+  return { lead: leads[lastIndex], rowIndex: lastIndex + 2 }; // +2 for header row and 1-based index
 }
 
 export async function updateLeadPrize(

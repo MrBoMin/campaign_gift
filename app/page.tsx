@@ -47,10 +47,11 @@ export default function Home() {
       }
 
       if (result.duplicate) {
+        const isWin = result.prize !== "No Prize" && result.prize !== "" && result.redemptionCode !== "";
         setPrizeData({
           prize: result.prize,
-          redemptionCode: result.redemptionCode,
-          isWin: result.redemptionCode !== "",
+          redemptionCode: isWin ? result.redemptionCode : "",
+          isWin,
           display: result.display,
         });
         setStep("result");
