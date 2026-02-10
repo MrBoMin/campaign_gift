@@ -13,7 +13,7 @@ export interface PrizeResult {
 export function selectPrize(inventory: InventoryItem[]): PrizeResult {
   const eligible = inventory.filter((item) => {
     if (!item.active) return false;
-    if (item.prizeType === "No Prize") return true;
+    if (item.prizeType.trim().toLowerCase() === "no prize") return true;
     return item.totalStock - item.claimed > 0;
   });
 
@@ -34,7 +34,7 @@ export function selectPrize(inventory: InventoryItem[]): PrizeResult {
     if (rand <= cumulative) {
       return {
         prizeType: item.prizeType,
-        isWin: item.prizeType !== "No Prize",
+        isWin: item.prizeType.trim().toLowerCase() !== "no prize",
       };
     }
   }
@@ -51,37 +51,41 @@ export function getPrizeDisplay(prizeType: string): {
   title: string;
   description: string;
 } {
-  switch (prizeType) {
-    case "Blind Box":
-      return {
-        emoji: "🎁",
-        title: "Blind Box ဖောက်ခွင့်",
-        description: "Booth မှာလာပြပြီး ဖောက်လို့ရပါပြီ!",
-      };
-    case "Scholarship 10%":
-      return {
-        emoji: "🎓",
-        title: "Scholarship Voucher",
-        description: "Enrollment မှာ 10% OFF ရပါပြီ!",
-      };
-    case "Photo Session":
-      return {
-        emoji: "📸",
-        title: "Free Photo Session",
-        description: "Booth မှာလာရိုက်ပါ!",
-      };
-    case "Thank You Gift":
-      return {
-        emoji: "🎉",
-        title: "Thank You Gift",
-        description: "Booth မှာ လက်ဆောင်လေးလာယူပါ!",
-      };
-    case "No Prize":
-    default:
-      return {
-        emoji: "❌",
-        title: "Better Luck Next Time",
-        description: "ကံမကောင်းပါ၊ Booth မှာတော့ လာလည်ပါနော်!",
-      };
+  // Normalize to handle variations (e.g. "Photo Session" vs "Photo Sessions")
+  const normalized = prizeType.trim().toLowerCase();
+
+  if (normalized === "blind box") {
+    return {
+      emoji: "🎁",
+      title: "Blind Box ဖောက်ခွင့်",
+      description: "Booth မှာလာပြပြီး ဖောက်လို့ရပါပြီ!",
+    };
   }
+  if (normalized.startsWith("scholarship")) {
+    return {
+      emoji: "🎓",
+      title: "Scholarship Voucher",
+      description: "Enrollment မှာ 10% OFF ရပါပြီ!",
+    };
+  }
+  if (normalized.startsWith("photo session")) {
+    return {
+      emoji: "📸",
+      title: "Free Photo Session",
+      description: "Booth မှာလာရိုက်ပါ!",
+    };
+  }
+  if (normalized === "thank you gift") {
+    return {
+      emoji: "🎉",
+      title: "Thank You Gift",
+      description: "Booth မှာ လက်ဆောင်လေးလာယူပါ!",
+    };
+  }
+  // No Prize / default
+  return {
+    emoji: "❌",
+    title: "Better Luck Next Time",
+    description: "ကံမကောင်းပါ၊ Booth မှာတော့ လာလည်ပါနော်!",
+  };
 }
