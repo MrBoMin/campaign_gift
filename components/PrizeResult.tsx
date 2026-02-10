@@ -99,13 +99,18 @@ export default function PrizeResult({
 
         {/* Booth location */}
         {isWin && (
-          <div className="animate-fade-in-up mb-8 rounded-2xl bg-blue-50 border border-blue-100 p-5" style={{ animationDelay: "0.3s" }}>
+          <div className="animate-fade-in-up mb-8 rounded-2xl bg-blue-50 border border-blue-100 p-5 space-y-3" style={{ animationDelay: "0.3s" }}>
             <p className="text-sm font-bold text-blue-700">
-              📍 Booth Location
+              📍 ဆုလာထုတ်ရန်
             </p>
-            <p className="mt-1.5 text-blue-600">
-              Hysan Education — Hall A, Booth 12
-            </p>
+            <div className="text-blue-600 text-sm space-y-1.5">
+              <p className="font-semibold">New Next Booth</p>
+              <p>Hysan Education Fair</p>
+            </div>
+            <div className="border-t border-blue-100 pt-3 text-blue-600 text-sm space-y-1.5">
+              <p className="font-semibold">New Next Campus</p>
+              <p>ကျောင်းမှာလည်း လာထုတ်လို့ရပါတယ်</p>
+            </div>
           </div>
         )}
 
