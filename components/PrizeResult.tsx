@@ -105,7 +105,7 @@ export default function PrizeResult({
             </p>
             <div className="text-blue-600 text-sm space-y-1.5">
               <p className="font-semibold">New Next Booth</p>
-              <p>Hysan Education Fair</p>
+              <p>DreamFest Event</p>
             </div>
             <div className="border-t border-blue-100 pt-3 text-blue-600 text-sm space-y-1.5">
               <p className="font-semibold">New Next Campus</p>

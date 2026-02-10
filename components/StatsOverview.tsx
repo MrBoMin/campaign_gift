@@ -99,7 +99,7 @@ export default function StatsOverview({ leads, inventory }: StatsOverviewProps) 
         )}
       </div>
 
-      {/* Inventory Summary */}
+      {/* Inventory Summary — uses actual lead counts for accuracy */}
       <div className="mt-4 rounded-xl border border-gray-100 bg-white p-4 shadow-sm">
         <h3 className="mb-3 text-sm font-semibold text-gray-700">
           Inventory Summary
@@ -108,7 +108,10 @@ export default function StatsOverview({ leads, inventory }: StatsOverviewProps) 
           {inventory
             .filter((item) => item.prizeType !== "No Prize")
             .map((item) => {
-              const remaining = item.totalStock - item.claimed;
+              // Count actual claims from leads data (source of truth)
+              const actualClaimed = leads.filter((l) => l.prize === item.prizeType).length;
+              const claimed = Math.max(item.claimed, actualClaimed);
+              const remaining = Math.max(0, item.totalStock - claimed);
               const pct = item.totalStock > 0 ? (remaining / item.totalStock) * 100 : 0;
               return (
                 <div key={item.prizeType}>

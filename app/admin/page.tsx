@@ -122,13 +122,13 @@ export default function AdminPage() {
     }
   }
 
-  async function handleRedeem(phone: string) {
-    setIsRedeeming(phone);
+  async function handleRedeem(phone: string, redemptionCode: string) {
+    setIsRedeeming(redemptionCode);
     try {
       const res = await fetch("/api/redeem", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ password, phone }),
+        body: JSON.stringify({ password, phone, redemptionCode }),
       });
 
       if (res.ok) {

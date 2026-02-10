@@ -14,7 +14,7 @@ interface Lead {
 
 interface LeadTableProps {
   leads: Lead[];
-  onRedeem: (phone: string) => void;
+  onRedeem: (phone: string, redemptionCode: string) => void;
   onExport: () => void;
   isRedeeming: string | null;
 }
@@ -122,11 +122,11 @@ export default function LeadTable({
                       lead.prize !== "No Prize" &&
                       lead.redeemed !== "Yes" && (
                         <button
-                          onClick={() => onRedeem(lead.phone)}
-                          disabled={isRedeeming === lead.phone}
+                          onClick={() => onRedeem(lead.phone, lead.redemptionCode)}
+                          disabled={isRedeeming === lead.redemptionCode}
                           className="rounded-lg bg-green-600 px-3 py-1 text-xs font-medium text-white transition-all hover:bg-green-700 disabled:opacity-60"
                         >
-                          {isRedeeming === lead.phone ? "..." : "Redeem"}
+                          {isRedeeming === lead.redemptionCode ? "..." : "Redeem"}
                         </button>
                       )}
                   </td>

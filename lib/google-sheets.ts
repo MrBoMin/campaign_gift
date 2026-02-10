@@ -149,7 +149,7 @@ export async function getInventory(): Promise<InventoryItem[]> {
     totalStock: parseInt(row[1] || "0", 10),
     claimed: parseInt(row[2] || "0", 10),
     weight: parseInt(row[3] || "0", 10),
-    active: row[4] === "TRUE",
+    active: String(row[4] || "FALSE").toUpperCase() === "TRUE",
   }));
 }
 
